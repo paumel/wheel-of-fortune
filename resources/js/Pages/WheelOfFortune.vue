@@ -7,6 +7,7 @@
             :data="data"
             @done="done"
             :imgParams="logo"
+            :animDuration="animDuration"
             @click="spinTheWheel"
         />
     </div>
@@ -18,6 +19,7 @@ import {ref} from "vue";
 
 const wheel = ref(null);
 const gift = ref(1);
+const animDuration = ref(randomDuration());
 const logo = ref({
     width: 100,
     height: 120,
@@ -73,12 +75,16 @@ const data = ref([
 function done() {
     wheel.value.clicked = false;
     gift.value = randomGift();
+    animDuration.value = randomDuration();
 }
 function spinTheWheel() {
     wheel.value.spin();
 }
 function randomGift() {
     return Math.floor(Math.random() * data.value.length) + 1
+}
+function randomDuration() {
+    return 1000 + (Math.random() * 10000);
 }
 </script>
 
