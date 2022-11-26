@@ -11,6 +11,13 @@
             @click="spinTheWheel"
         />
     </div>
+
+    <div class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0" v-if="showWinner">
+      <div class="bg-white px-16 py-14 rounded-md text-center">
+        <h1 class="text-xl mb-4 font-bold text-slate-500">{{winnerName}}</h1>
+        <button class="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold" @click="getNewData">Next</button>
+      </div>
+    </div>
 </template>
 
 <script setup>
@@ -18,9 +25,13 @@ import { Wheel } from "vue3-fortune-wheel";
 import {ref} from "vue"; import {Inertia} from "@inertiajs/inertia";
 
 const props = defineProps({
-    nextPlayer: Object,
+    nextPlayer: Number,
     players: Array,
 });
+
+const showWinner = ref(false);
+
+const winnerName = props.players.find(player => player.id === props.nextPlayer).value
 
 const wheel = ref(null);
 
@@ -33,9 +44,7 @@ const logo = ref({
 })
 
 function done() {
-    wheel.value.clicked = false;
-    animDuration.value = randomDuration();
-    getNewData()
+    showWinner.value = true
 }
 function spinTheWheel() {
     wheel.value.spin();

@@ -39,7 +39,7 @@ class WheelController extends Controller
             'players' => $players->map(static function (Player $player) {
                 return $player->formatWheelData();
             }),
-            'next' => $nextPlayer->id,
+            'nextPlayer' => $nextPlayer->id,
         ]);
     }
 }
