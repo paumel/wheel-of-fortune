@@ -3,8 +3,8 @@
         <h1>Wheel of fortune</h1>
         <Wheel
             ref="wheel"
-            :gift="gift"
-            :data="data"
+            :gift="nextPlayer"
+            :data="players"
             @done="done"
             :imgParams="logo"
             :animDuration="animDuration"
@@ -15,10 +15,10 @@
 
 <script setup>
 import { Wheel } from "vue3-fortune-wheel";
-import {ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 
 const wheel = ref(null);
-const gift = ref(1);
+const nextPlayer = ref(1);
 const animDuration = ref(randomDuration());
 const logo = ref({
     width: 100,
@@ -26,65 +26,31 @@ const logo = ref({
     src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png",
 })
 
-const data = ref([
-    {
-        id: 1,
-        value: "Paulius",
-        bgColor: "#7d7db3",
-        color: "#ffffff",
-    },
-    {
-        id: 2,
-        value: "Pranas",
-        bgColor: "#ffffff",
-        color: "#000000",
-    },
-    {
-        id: 3,
-        value: "Jurgis",
-        bgColor: "#c92729",
-        color: "#ffffff",
-    },
-    {
-        id: 4,
-        value: "Laura",
-        bgColor: "#7d7db3",
-        color: "#ffffff",
-    },
-    {
-        id: 5,
-        value: "Augustinas",
-        bgColor: "#ffffff",
-        color: "#000000",
-    },
-    {
-        id: 6,
-        value: "Justė",
-        bgColor: "#c92729",
-        color: "#ffffff",
-    },
-    {
-        id: 7,
-        value: "Mantas",
-        bgColor: "#ffffff",
-        color: "#000000",
-    },
-]
-)
+const players = ref(null)
+
+onBeforeMount(() => {
+    getData()
+})
 
 function done() {
+    getData()
     wheel.value.clicked = false;
-    gift.value = randomGift();
     animDuration.value = randomDuration();
 }
 function spinTheWheel() {
     wheel.value.spin();
 }
-function randomGift() {
-    return Math.floor(Math.random() * data.value.length) + 1
-}
+
 function randomDuration() {
     return 1000 + (Math.random() * 10000);
+}
+
+function getData() {
+    axios.post(route('wheel-data'))
+    .then((response) => {
+        players.value = response.data.players
+        nextPlayer.value = response.data.next
+    });
 }
 </script>
 
