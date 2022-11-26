@@ -39,4 +39,6 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 
-Route::get('/', WheelController::class)->name('wheel');
+Route::middleware(['throttle:global'])->group(function () {
+    Route::get('/', WheelController::class)->name('wheel');
+});
