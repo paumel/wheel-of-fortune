@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Game::class);
             $table->foreignIdFor(Player::class);
-            $table->timestamps();
         });
     }
 
