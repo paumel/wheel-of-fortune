@@ -20,7 +20,7 @@ class GameRepository implements GameRepositoryInterface
             return Game::new();
         }
 
-        if ($game->players->count() === 5) {
+        if ($game->players->count() === Game::PLAYERS_COUNT) {
             return Game::new();
         }
 

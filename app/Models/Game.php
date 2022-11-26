@@ -16,6 +16,9 @@ class Game extends Model
 {
     use HasFactory;
 
+    /** @var int PLAYERS_COUNT */
+    public const PLAYERS_COUNT = 5;
+
     /**
      * @return BelongsToMany
      */

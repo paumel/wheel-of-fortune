@@ -28,6 +28,14 @@ class WheelController extends Controller
      */
     public function __invoke(Request $request): Response
     {
+        $request->validate([
+            'new_game' => ['sometimes', 'boolean'],
+        ]);
+
+        if ($request->get('new_game')) {
+            Game::new();
+        }
+
         $game = $this->gameRepository->getCurrent();
 
         $players = Player::query()->whereNotIn('id', $game->players->pluck('id'))->get();
@@ -35,11 +43,18 @@ class WheelController extends Controller
         $nextPlayer = $players->random();
         $game->players()->attach($nextPlayer->id);
 
+        $game->refresh();
+
+        $a = $game->players->count();
+        $b = $game->players->pluck('name')->toArray();
+
         return Inertia::render('WheelOfFortune', [
             'players' => $players->map(static function (Player $player) {
                 return $player->formatWheelData();
             }),
             'nextPlayer' => $nextPlayer->id,
+            'squadFull' => $game->players->count() === Game::PLAYERS_COUNT,
+            'squad' => $game->players->fresh()->pluck('name'),
         ]);
     }
 }

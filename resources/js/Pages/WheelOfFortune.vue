@@ -12,10 +12,17 @@
         />
     </div>
 
-    <div class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0" v-if="showWinner">
+    <div class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0" v-if="!squadFull && showWinner">
       <div class="bg-white px-16 py-14 rounded-md text-center">
         <h1 class="text-xl mb-4 font-bold text-slate-500">{{winnerName}}</h1>
         <button class="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold" @click="getNewData">Next</button>
+      </div>
+    </div>
+
+    <div class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0" v-if="squadFull && showWinner">
+      <div class="bg-white px-16 py-14 rounded-md text-center">
+        <p class="text-xl mb-4 font-bold text-slate-500" v-for="name in squad">{{name}}</p>
+        <button class="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold" @click="getNewData">New game</button>
       </div>
     </div>
 </template>
@@ -27,6 +34,8 @@ import {ref} from "vue"; import {Inertia} from "@inertiajs/inertia";
 const props = defineProps({
     nextPlayer: Number,
     players: Array,
+    squadFull: Boolean,
+    squad: Array
 });
 
 const showWinner = ref(false);
