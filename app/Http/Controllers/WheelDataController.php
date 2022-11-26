@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Player;
 use Illuminate\Http\Request;
 
 class WheelDataController extends Controller
@@ -13,22 +14,13 @@ class WheelDataController extends Controller
      */
     public function __invoke(Request $request): array
     {
+        $players = Player::all();
+
         return [
-            'players' => [
-                [
-                    'id' => 1,
-                    'value' => "Paulius",
-                    'bgColor' => "#7d7db3",
-                    'color' => "#ffffff",
-                ],
-                [
-                    'id' => 2,
-                    'value' => "Pranas",
-                    'bgColor' => "#dddddd",
-                    'color' => "#ffffff",
-                ],
-            ],
-            'next' => 2,
+            'players' => $players->map(static function (Player $player) {
+                return $player->formatWheelData();
+            }),
+            'next' => $players->pluck('id')->random(),
         ];
     }
 }
