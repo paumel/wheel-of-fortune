@@ -15,27 +15,27 @@
 
 <script setup>
 import { Wheel } from "vue3-fortune-wheel";
-import {onBeforeMount, ref} from "vue";
+import {ref} from "vue"; import {Inertia} from "@inertiajs/inertia";
+
+const props = defineProps({
+    nextPlayer: Object,
+    players: Array,
+});
 
 const wheel = ref(null);
-const nextPlayer = ref(1);
+
 const animDuration = ref(randomDuration());
+
 const logo = ref({
     width: 100,
     height: 120,
     src: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png",
 })
 
-const players = ref(null)
-
-onBeforeMount(() => {
-    getData()
-})
-
 function done() {
-    getData()
     wheel.value.clicked = false;
     animDuration.value = randomDuration();
+    getNewData()
 }
 function spinTheWheel() {
     wheel.value.spin();
@@ -45,12 +45,8 @@ function randomDuration() {
     return 1000 + (Math.random() * 10000);
 }
 
-function getData() {
-    axios.post(route('wheel-data'))
-    .then((response) => {
-        players.value = response.data.players
-        nextPlayer.value = response.data.next
-    });
+function getNewData(){
+    Inertia.get(route('wheel'))
 }
 </script>
 

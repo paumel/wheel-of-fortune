@@ -6,8 +6,10 @@ use App\Interfaces\GameRepositoryInterface;
 use App\Models\Game;
 use App\Models\Player;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
-class WheelDataController extends Controller
+class WheelController extends Controller
 {
     private GameRepositoryInterface $gameRepository;
 
@@ -22,9 +24,9 @@ class WheelDataController extends Controller
     /**
      * @param Request $request
      *
-     * @return array
+     * @return Response
      */
-    public function __invoke(Request $request): array
+    public function __invoke(Request $request): Response
     {
         $game = $this->gameRepository->getCurrent();
 
@@ -33,11 +35,11 @@ class WheelDataController extends Controller
         $nextPlayer = $players->random();
         $game->players()->attach($nextPlayer->id);
 
-        return [
+        return Inertia::render('WheelOfFortune', [
             'players' => $players->map(static function (Player $player) {
                 return $player->formatWheelData();
             }),
             'next' => $nextPlayer->id,
-        ];
+        ]);
     }
 }
