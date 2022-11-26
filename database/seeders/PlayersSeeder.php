@@ -15,11 +15,6 @@ class PlayersSeeder extends Seeder
      */
     public function run()
     {
-//        Player::query()->create([
-//            'name' => 'Paulius',
-//            'bgColor' => '#ffffff',
-//            'color' => '#000000',
-//        ]);
         $playersData = [
             [
                 'name' => 'Paulius',
@@ -57,7 +52,7 @@ class PlayersSeeder extends Seeder
                 'color' => '#000000',
             ],
         ];
-        
+
         Player::query()->insert($playersData);
     }
 }
